@@ -102,6 +102,11 @@ public:
     /// Return all object categories.
     const HashMap<String, Vector<StringHash> >& GetObjectCategories() const { return objectCategories_; }
 
+	/// Return all object keys
+	const Vector<String>& GetObjectCategoriesKeys() const;
+	/// Return values by key
+	const Vector<String>& GetObjectsByCategory(const String category) const;
+
     /// Return active event sender. Null outside event handling.
     Object* GetEventSender() const;
 

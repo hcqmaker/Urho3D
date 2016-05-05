@@ -1,0 +1,43 @@
+$#include "Resource/XMLElement.h"
+
+class XPathResultSet
+{
+public:
+    XPathResultSet();
+    XPathResultSet(XMLFile* file, pugi::xpath_node_set* resultSet);
+    XPathResultSet(const XPathResultSet& rhs);
+    ~XPathResultSet();
+    //XPathResultSet& operator =(const XPathResultSet& rhs);
+    //XMLElement operator [](unsigned index) const;
+    XMLElement FirstResult();
+    unsigned Size() const;
+    bool Empty() const;
+
+    //pugi::xpath_node_set* GetXPathNodeSet() const { return resultSet_; }
+};
+
+
+class XPathQuery
+{
+public:
+    XPathQuery();
+    XPathQuery(const String& queryString, const String& variableString = String::EMPTY);
+    ~XPathQuery();
+    void Bind();
+    bool SetVariable(const String& name, bool value);
+    bool SetVariable(const String& name, float value);
+    bool SetVariable(const String& name, const String& value);
+    bool SetVariable(const char* name, const char* value);
+    bool SetVariable(const String& name, const XPathResultSet& value);
+    bool SetQuery(const String& queryString, const String& variableString = String::EMPTY, bool bind = true);
+    void Clear();
+    bool EvaluateToBool(XMLElement element) const;
+    float EvaluateToFloat(XMLElement element) const;
+    String EvaluateToString(XMLElement element) const;
+    XPathResultSet Evaluate(XMLElement element) const;
+
+    String GetQuery() const { return queryString_; }
+
+   // pugi::xpath_query* GetXPathQuery() const { return query_; }
+   // pugi::xpath_variable_set* GetXPathVariableSet() const { return variables_; }
+};

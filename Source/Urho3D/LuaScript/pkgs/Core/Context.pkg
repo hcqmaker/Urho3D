@@ -5,6 +5,9 @@ class Context
     Object* GetEventSender() const;
     EventHandler* GetEventHandler() const;
     const String GetTypeName(StringHash objectType) const;
+
+	const Vector<String>& GetObjectCategoriesKeys() const;
+	const Vector<String>& GetObjectsByCategory(const String category) const;
 };
 
 Context* GetContext();

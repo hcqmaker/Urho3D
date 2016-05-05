@@ -198,6 +198,41 @@ Object* Context::GetSubsystem(StringHash type) const
         return 0;
 }
 
+
+const Vector<String>& Context::GetObjectCategoriesKeys() const
+{
+	static Vector<String> dest;
+	dest.Clear();
+	for (HashMap<String, Vector<StringHash> >::ConstIterator i = objectCategories_.Begin(); i != objectCategories_.End(); ++i)
+		dest.Push(i->first_);
+	return dest;
+}
+
+const Vector<String>& Context::GetObjectsByCategory(const String category) const
+{
+	static Vector<String> components;
+	components.Clear();
+
+	const HashMap<String, Vector<StringHash> >& categories = this->GetObjectCategories();
+    HashMap<String, Vector<StringHash> >::ConstIterator i = categories.Find(category);
+    if (i != categories.End())
+    {
+        const HashMap<StringHash, SharedPtr<ObjectFactory> >& factories = this->GetObjectFactories();
+        const Vector<StringHash>& factoryHashes = i->second_;
+        components.Reserve(factoryHashes.Size());
+
+        for (unsigned j = 0; j < factoryHashes.Size(); ++j)
+        {
+            HashMap<StringHash, SharedPtr<ObjectFactory> >::ConstIterator k = factories.Find(factoryHashes[j]);
+            if (k != factories.End())
+                components.Push(k->second_->GetTypeName());
+        }
+    }
+
+    Sort(components.Begin(), components.End());
+	return components;
+}
+
 const Variant& Context::GetGlobalVar(StringHash key) const
 {
     VariantMap::ConstIterator i = globalVars_.Find(key);
